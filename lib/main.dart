@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_1/create_task.dart';
+import 'package:project_1/first_page.dart';
+import 'package:project_1/task_detail.dart';
 import 'package:project_1/todo.dart';
 
 void main() {
@@ -8,7 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,50 +25,46 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int currentPage = 0;
+  List<Widget> pages = const [
+    FirstPage(),
+    ToDo(),
+    CreateTask(),
+    TaskDetail(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.red[400],
-      body: Center(
-        child: Column(
-          children: [
-            Image.asset("resources/stick-removebg-preview.png"),
-            const SizedBox(
-              height: 80,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return const ToDo();
-                  }),
-                );
-              },
-              style: ButtonStyle(
-                backgroundColor: const MaterialStatePropertyAll(Colors.blue),
-                fixedSize: MaterialStateProperty.all<Size>(
-                  const Size(200.0, 40.0),
-                ),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                ),
-              ),
-              child: const Text(
-                'Get Started',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-            )
-          ],
-        ),
+      bottomNavigationBar: NavigationBar(
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            label: "Home,",
+          ),
+          NavigationDestination(
+              icon: Icon(Icons.question_answer), label: "ToDo List"),
+          NavigationDestination(icon: Icon(Icons.home), label: "Create"),
+          NavigationDestination(icon: Icon(Icons.home), label: "Show"),
+        ],
+        backgroundColor: Colors.red[400],
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPage = index;
+          });
+        },
+        selectedIndex: currentPage,
       ),
+      body: pages[currentPage],
     );
   }
 }
