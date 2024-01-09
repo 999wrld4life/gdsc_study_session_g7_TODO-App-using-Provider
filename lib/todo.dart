@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:project_1/components/task_list.dart';
 import 'package:project_1/create_task.dart';
+import 'package:project_1/provider/crud_provider.dart';
+import 'package:provider/provider.dart';
 
 class ToDo extends StatelessWidget {
   const ToDo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var currentTask = Provider.of<CrudManager>(context).tasks;
     return Scaffold(
       appBar: AppBar(
           title: const Text('ToDO List'),
@@ -37,200 +41,21 @@ class ToDo extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(15),
-                width: 390,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      'U',
-                      style: TextStyle(
-                        fontSize: 27,
-                      ),
-                    ),
-                    const SizedBox(width: 13),
-                    const Text(
-                      'UX/UI app design',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 80),
-                    const Text(
-                      'Apr 20, 2023',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Container(
-                      height: 40,
-                      width: 4,
-                      color: Colors.red,
-                    )
-                  ],
+                height: 500,
+                child: ListView.builder(
+                  itemCount: Provider.of<CrudManager>(context).tasks.length,
+                  itemBuilder: ((context, index) {
+                    return taskList(currentTask[index], context);
+                  }),
                 ),
               ),
-              const SizedBox(height: 10),
-              Container(
-                width: 390,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      'U',
-                      style: TextStyle(
-                        fontSize: 27,
-                      ),
-                    ),
-                    const SizedBox(width: 13),
-                    const Text(
-                      'UX/UI app design',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 80),
-                    const Text(
-                      'Apr 20, 2023',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Container(
-                      height: 40,
-                      width: 4,
-                      color: Colors.green,
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: 390,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      'V',
-                      style: TextStyle(
-                        fontSize: 27,
-                      ),
-                    ),
-                    const SizedBox(width: 13),
-                    const Text(
-                      'View Candidates',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 80),
-                    const Text(
-                      'Apr 20, 2023',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Container(
-                      height: 40,
-                      width: 4,
-                      color: Colors.yellow,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                width: 390,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      'F',
-                      style: TextStyle(
-                        fontSize: 27,
-                      ),
-                    ),
-                    const SizedBox(width: 13),
-                    const Text(
-                      'Football Dribling',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 80),
-                    const Text(
-                      'Apr 20, 2023',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 24),
-                    Container(
-                      height: 40,
-                      width: 4,
-                      color: Colors.red,
-                    )
-                  ],
-                ),
-              ),
+              // taskList(),
+              // const SizedBox(height: 10),
+              // taskList(),
+              // const SizedBox(height: 10),
+              // taskList(),
+              // const SizedBox(height: 10),
+              // taskList(),
               const SizedBox(height: 14),
               ElevatedButton(
                 onPressed: () {

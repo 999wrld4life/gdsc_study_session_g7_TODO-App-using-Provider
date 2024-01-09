@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:project_1/create_task.dart';
 import 'package:project_1/first_page.dart';
+import 'package:project_1/provider/crud_provider.dart';
 import 'package:project_1/task_detail.dart';
 import 'package:project_1/todo.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => CrudManager(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:project_1/task_detail.dart';
+import 'package:project_1/model/task_model.dart';
+import 'package:project_1/provider/crud_provider.dart';
+import 'package:provider/provider.dart';
 
 class CreateTask extends StatefulWidget {
-  const CreateTask({super.key});
+  final TaskModel? editingTask;
+  const CreateTask({super.key, this.editingTask});
 
   @override
   State<CreateTask> createState() => _CreateTaskState();
 }
 
+late TextEditingController titleController;
+late TextEditingController dateController;
+late TextEditingController descController;
+
 class _CreateTaskState extends State<CreateTask> {
   final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers based on whether it's a new task or editing existing
+    titleController = TextEditingController(
+        text: widget.editingTask?.title ??
+            ''); // Provide default value if editing
+    dateController = TextEditingController(
+        text:
+            widget.editingTask?.date ?? ''); // Provide default value if editing
+    descController = TextEditingController(
+        text: widget.editingTask?.description ??
+            ''); // Provide default value if editing
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -73,6 +95,7 @@ class _CreateTaskState extends State<CreateTask> {
                     ], // Shadow
                   ),
                   child: TextFormField(
+                    controller: titleController,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Enter your task here...',
@@ -111,6 +134,7 @@ class _CreateTaskState extends State<CreateTask> {
                     ], // Shadow
                   ),
                   child: TextFormField(
+                    controller: dateController,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Enter the date here (YYYY-MM-DD)...',
@@ -155,6 +179,7 @@ class _CreateTaskState extends State<CreateTask> {
                     ], // Shadow
                   ),
                   child: TextFormField(
+                    controller: descController,
                     decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Enter your description here...'),
@@ -176,11 +201,40 @@ class _CreateTaskState extends State<CreateTask> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        final snackBar = SnackBar(
-                          content: Text('Task Created'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        if (widget.editingTask != null) {
+                          // If editing an existing task, update it
+                          Provider.of<CrudManager>(context, listen: false)
+                              .updateTask(
+                            widget.editingTask!,
+                            TaskModel(
+                              title: titleController.text,
+                              date: dateController.text,
+                              description: descController.text,
+                            ),
+                          );
+                          final snackBar = SnackBar(
+                            content: Text('Task Updated'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else {
+                          // If not editing, add a new task
+                          Provider.of<CrudManager>(context, listen: false)
+                              .addToTasks(
+                            TaskModel(
+                              title: titleController.text,
+                              date: dateController.text,
+                              description: descController.text,
+                            ),
+                          );
+                          final snackBar = SnackBar(
+                            content: Text('Task Created'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
                       }
+                      titleController.clear();
+                      dateController.clear();
+                      descController.clear();
                     },
                     style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.red),
